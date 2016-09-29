@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     less = require('gulp-less'),
     jade = require('gulp-jade'),
+    imagemin = require('gulp-imagemin'),
     cleanCSS = require('gulp-clean-css'),
     runSequence = require('run-sequence')
 
@@ -20,6 +21,10 @@ gulp.task('build', [
 
 gulp.task('images', function() {
   gulp.src(['./src/images/*','./src/images/**/*'])
+    .pipe(imagemin({
+      progressive: true,
+      interlaced: true
+    }))
     .pipe(gulp.dest('./build/img'));
 });
 
@@ -63,6 +68,7 @@ gulp.task('watch', function () {
     gulp.watch(['./src/styles/*.less', './src/styles/global/*.less', './src/styles/blocks/*.less', './src/styles/plugins/*.less'], ['styles']);
     gulp.watch('./src/pages/*.jade', ['templates']);
     gulp.watch('./src/templates/*.jade', ['templates']);
+    gulp.watch('./src/images/*', ['images']);
     gulp.watch('./src/scripts/*.js', ['scripts']);
 });
 
