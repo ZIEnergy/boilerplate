@@ -23,7 +23,7 @@ gulp.task('images', function() {
   gulp.src(['./src/images/*','./src/images/**/*'])
     .pipe(imagemin({
       progressive: true,
-      interlaced: true
+      optimizationLevel: 7
     }))
     .pipe(gulp.dest('./build/img'))
     .pipe(browserSync.reload({stream:true}));
