@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
-    connect = require('gulp-connect'),
+    browserSync = require('browser-sync'),
     less = require('gulp-less'),
     jade = require('gulp-jade'),
     imagemin = require('gulp-imagemin'),
@@ -25,7 +25,8 @@ gulp.task('images', function() {
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest('./build/img'));
+    .pipe(gulp.dest('./build/img'))
+    .pipe(browserSync.reload({stream:true}));
 });
 
 gulp.task('templates', function () {
@@ -35,23 +36,30 @@ gulp.task('templates', function () {
       locals: params,
       pretty: true
     }))
-    .pipe(gulp.dest('./build'));
+    .pipe(gulp.dest('./build'))
+    .pipe(browserSync.reload({stream:true}));
 });
 
 gulp.task('fonts', function () {
   gulp.src('./src/fonts/*.{eot,svg,ttf,woff,woff2}')
-    .pipe(gulp.dest('./build/fonts'));
+    .pipe(gulp.dest('./build/fonts'))
+    .pipe(browserSync.reload({stream:true}));
 });
 
-gulp.task('connect', function() {
-  connect.server({
-    root: './build'
-  });
+gulp.task('server', function() {
+    browserSync.init({
+        server: {
+            baseDir: "build"
+        },
+      tunnel: 'zienergy',
+      reloadOnRestart: true,
+    });
 });
 
 gulp.task('scripts', function () {
   gulp.src('./src/scripts/*.js')
-    .pipe(gulp.dest('./build/js'));
+    .pipe(gulp.dest('./build/js'))
+    .pipe(browserSync.reload({stream:true}));
 });
 
 gulp.task('styles', function () {
@@ -61,7 +69,8 @@ gulp.task('styles', function () {
         browsers: ['last 20 versions']
     }))
     .pipe(cleanCSS())
-    .pipe(gulp.dest('./build/css'));
+    .pipe(gulp.dest('./build/css'))
+    .pipe(browserSync.reload({stream:true}));
 });
 
 gulp.task('watch', function () {
@@ -72,4 +81,4 @@ gulp.task('watch', function () {
     gulp.watch('./src/scripts/*.js', ['scripts']);
 });
 
-gulp.task('dev', ['connect', 'build', 'watch']);
+gulp.task('dev', ['server', 'build', 'watch']);
