@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync'),
     less = require('gulp-less'),
     jade = require('gulp-jade'),
+    rename = require("gulp-rename"),
     imagemin = require('gulp-imagemin'),
     cleanCSS = require('gulp-clean-css'),
     runSequence = require('run-sequence')
@@ -20,7 +21,8 @@ gulp.task('build', [
 ]);
 
 gulp.task('images', function() {
-  gulp.src(['./src/images/*','./src/images/**/*'])
+  gulp.src(['./src/images/*','./src/images/**/*','./src/blocks/**/images/*'])
+    .pipe(rename({dirname: ''}))
     .pipe(imagemin({
       progressive: true,
       optimizationLevel: 7
@@ -74,9 +76,8 @@ gulp.task('styles', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(['./src/styles/*.less', './src/styles/global/*.less', './src/styles/blocks/*.less', './src/styles/plugins/*.less'], ['styles']);
-    gulp.watch('./src/pages/*.jade', ['templates']);
-    gulp.watch('./src/templates/*.jade', ['templates']);
+    gulp.watch(['./src/styles/*.less', './src/styles/global/*.less', './src/blocks/**/*.less', './src/styles/plugins/*.less'], ['styles']);
+    gulp.watch(['./src/pages/*.jade','./src/templates/*.jade','./src/blocks/**/*.jade'], ['templates']);
     gulp.watch('./src/images/*', ['images']);
     gulp.watch('./src/scripts/*.js', ['scripts']);
 });
