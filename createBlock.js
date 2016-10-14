@@ -28,6 +28,8 @@ if(blockName) {
     // Нет ошибки, поехали!
     else {
       console.log('Создание папки ' + dirPath + ' (создана, если ещё не существует)');
+      
+      mkdirp(dirPath + 'images');
 
       // Обходим массив расширений и создаем файлы, если они еще не созданы
       extensions.forEach(function(extention){
