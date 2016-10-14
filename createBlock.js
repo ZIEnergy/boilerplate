@@ -43,14 +43,14 @@ if(blockName) {
         // Если это LESS
         if(extention == 'less') {
           styleFileImport = '@import \'./src/blocks/' + blockName + '/' + blockName + '.less\';';
-          fileContent = '// Для импорта в диспетчер подключений: ' + styleFileImport + '\n\n\n.' + blockName + ' {\n  \n}\n';
+          fileContent = '.' + blockName + ' {\n  \n}\n';
           fileCreateMsg = 'Для импорта стилей: ' + styleFileImport;
         }
 
         // Если это PUG
         if(extention == 'pug') {
           templateFileImport = 'include ../blocks/' + blockName + '/' + blockName + '.pug';
-          fileContent = '// Для импорта в диспетчер подключений блоков: ' + templateFileImport + '\n\n\nmixin ' + blockName + '(mdf)\n  .' + blockName + '(class=mdf)';
+          fileContent = 'mixin ' + blockName + '(mdf)\n  .' + blockName + '(class=mdf)';
           fileCreateMsg = 'Для импорта блока: ' + templateFileImport;
         }
 
