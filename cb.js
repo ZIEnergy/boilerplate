@@ -11,7 +11,7 @@ const fs = require('fs');                // будем работать с фа�
 const mkdirp = require('mkdirp');        // зависимость, должна быть установлена (см. описание выше)
 
 let blockName = process.argv[2];          // получим имя блока
-let defaultExtensions = ['pug', 'less']; // расширения по умолчанию
+let defaultExtensions = ['pug', 'less', 'js']; // расширения по умолчанию
 let extensions = uniqueArray(defaultExtensions.concat(process.argv.slice(3)));  // добавим введенные при вызове расширения (если есть)
 
 // Если есть имя блока
@@ -44,31 +44,51 @@ if(blockName) {
         if(extention == 'less') {
           styleFileImport = '@import \'./src/blocks/' + blockName + '/' + blockName + '.less\';';
           fileContent = '.' + blockName + ' {\n  \n}\n';
-          fileCreateMsg = 'Для импорта стилей: ' + styleFileImport;
+          
+          fs.appendFile('src/styles/style.less', '\n' + styleFileImport, function (err) {
+            if(err) {
+              return console.log('style.less НЕ обновлён: ' + err);
+            }
+            console.log('style.less обновлён');
+          });
         }
 
         // Если это PUG
         if(extention == 'pug') {
           templateFileImport = 'include ../blocks/' + blockName + '/' + blockName + '.pug';
-          fileContent = 'mixin ' + blockName + '(mdf)\n  .' + blockName + '(class=mdf)';
-          fileCreateMsg = 'Для импорта блока: ' + templateFileImport;
+          fileContent = 'mixin ' + blockName + '(additionalClass)\n  .' + blockName + '(class=additionalClass)';
+          
+          fs.appendFile('src/templates/blocks.pug', templateFileImport + '\n', function (err) {
+            if(err) {
+              return console.log('blocks.pug НЕ обновлён: ' + err);
+            }
+            console.log('blocks.pug обновлён');
+          });
         }
 
         // Создаем файл, если он еще не существует
         if(fileExist(filePath) === false) {
+          
           fs.writeFile(filePath, fileContent, function(err) {
             if(err) {
               return console.log('Файл НЕ создан: ' + err);
             }
             console.log('Файл создан: ' + filePath);
-            if(fileCreateMsg) {
-              console.warn(fileCreateMsg);
-            }
           });
         }
         else {
           console.log('Файл НЕ создан: ' + filePath + ' (уже существует)');
         }
+        
+//        if(true) {
+//          
+//        }
+          
+        
+//        if(true) {
+//          
+//        }
+          
       });
     }
   });
