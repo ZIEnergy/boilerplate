@@ -5,11 +5,8 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     pug = require('gulp-pug'),
     rename = require("gulp-rename"),
-    uglify = require("gulp-uglify"),
     concat = require("gulp-concat"),
-    insert = require('gulp-insert');
-    imagemin = require('gulp-imagemin'),
-    cleanCSS = require('gulp-clean-css'),
+    insert = require('gulp-insert'),
     runSequence = require('run-sequence')
 
 gulp.task('default', function () {
@@ -35,10 +32,6 @@ gulp.task('clean', function () {
 gulp.task('images', function() {
   gulp.src(['./src/images/*','./src/images/**/*','./src/blocks/**/images/*'])
     .pipe(rename({dirname: ''}))
-    .pipe(imagemin({
-      progressive: true,
-      optimizationLevel: 7
-    }))
     .pipe(gulp.dest('./build/img'))
     .pipe(browserSync.reload({stream:true}));
 });
@@ -47,7 +40,8 @@ gulp.task('templates', function () {
   var params = {};
   gulp.src('./src/pages/*.pug')
     .pipe(pug({
-      locals: params
+      locals: params,
+      pretty: true
     }))
     .pipe(gulp.dest('./build'))
     .pipe(browserSync.reload({stream:true}));
@@ -66,14 +60,12 @@ gulp.task('scripts:jquery', function () {
 
 gulp.task('scripts:plugins', function () {
   gulp.src('./src/scripts/plugins/*.js')
-    .pipe(uglify())
     .pipe(concat('plugins.js'))
     .pipe(gulp.dest('./build/js'));
 });
 
 gulp.task('scripts', function () {
   gulp.src(['./src/blocks/**/*.js', './src/scripts/script.js'])
-    .pipe(uglify())
     .pipe(concat('script.js'))
     .pipe(insert.wrap('$(document).ready(function(){', '})'))
     .pipe(gulp.dest('./build/js'))
@@ -96,7 +88,6 @@ gulp.task('styles', function () {
     .pipe(autoprefixer({
         browsers: ['last 20 versions']
     }))
-    .pipe(cleanCSS())
     .pipe(gulp.dest('./build/css'))
     .pipe(browserSync.reload({stream:true}));
 });
