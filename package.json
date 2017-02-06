@@ -15,7 +15,9 @@
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-batch": "^1.0.5",
+    "gulp-clean-css": "^2.4.0",
     "gulp-plumber": "^1.1.0",
+    "gulp-uglify": "^2.0.1",
     "gulp-watch": "^4.3.11"
   }
 }

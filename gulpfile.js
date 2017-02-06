@@ -10,6 +10,8 @@ var gulp = require('gulp'),
     runSequence = require('run-sequence'),
     watch = require('gulp-watch'),
     batch = require('gulp-batch'),
+    cleanCSS = require('gulp-clean-css'),
+    uglify = require('gulp-uglify');
     plumber = require('gulp-plumber');
 
 gulp.task('default', function () {
@@ -69,6 +71,7 @@ gulp.task('scripts:plugins', function () {
   gulp.src('./src/scripts/plugins/*.js')
     .pipe(plumber())
     .pipe(concat('plugins.js'))
+    .pipe(uglify())
     .pipe(gulp.dest('./build/js'));
 });
 
@@ -77,6 +80,7 @@ gulp.task('scripts', function () {
     .pipe(plumber())
     .pipe(concat('script.js'))
     .pipe(insert.wrap('$(document).ready(function(){', '})'))
+    .pipe(uglify())
     .pipe(gulp.dest('./build/js'))
     .pipe(browserSync.reload({stream:true}));
 });
@@ -98,6 +102,7 @@ gulp.task('styles', function () {
     .pipe(autoprefixer({
         browsers: ['last 20 versions']
     }))
+    .pipe(cleanCSS())
     .pipe(gulp.dest('./build/css'))
     .pipe(browserSync.reload({stream:true}));
 });
